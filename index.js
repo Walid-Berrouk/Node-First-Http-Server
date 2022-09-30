@@ -13,8 +13,23 @@ const fs = require("fs");
 
 // })
 
-//? Level 2 : Loading Files
+//? Level 2 : Loading File
+const server = http.createServer((req, res) => {
+    // console.log(req.url);
 
+    if (req.url === '/') {
+      fs.readFile(
+        path.join(__dirname, 'public', 'index.html'),
+        (err, content) => {
+          if (err) throw err;
+          console.log("request page : index.html");
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(content);
+        }
+      );
+    }
+
+})
 
 
 // Launching server
