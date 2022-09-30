@@ -4,7 +4,8 @@
   "description": "This is my first http server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon serve"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Walid-Berrouk/Node-First-Http-Server/issues"
   },
-  "homepage": "https://github.com/Walid-Berrouk/Node-First-Http-Server#readme"
+  "homepage": "https://github.com/Walid-Berrouk/Node-First-Http-Server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
