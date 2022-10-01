@@ -88,10 +88,9 @@ const fs = require("fs");
 //? Level 4 : API Serving
 const server = http.createServer((req, res) => {
 
-    const url = req.url.split("?")[0]
-    const dataQueries = req.url.split("?")[1] ? req.url.split("?")[1].split("&") : undefined
+    const myUrl = new URL('http://localhost:5000' + req.url)
 
-    switch (url) {
+    switch (myUrl.pathname) {
         case '/':
             fs.readFile(
                 path.join(__dirname, 'public', 'index.html'),
@@ -126,34 +125,29 @@ const server = http.createServer((req, res) => {
             res.write(cssPage)
             res.end();
             break;
-        case '/api/data':
+        case '/api/comments':
             // See available properties
             // console.log(req)
-            let data = require('./storage/data.json')
+            let data = require('./storage/comments.json')
             switch (req.method) {
                 case "GET":
                     res.writeHead(200, 'application/json')
                     res.end(JSON.stringify(data));
                     break;
-                case "POST":
-                    let singleDataQuery;
-
-                    for (let index = 0; index < dataQueries.length; index++) {
-                        console.log(dataQueries[index], dataQueries[index + 1])
-                        singleDataQuery = dataQueries[index].split('=');
-                        var addedData = {}
-                        addedData[singleDataQuery[0].replaceAll("%20", " ")] = singleDataQuery[1].replaceAll("%20", " ")
-                        data = [...data, addedData]
-                    }
-                    fs.writeFileSync("storage/data.json", JSON.stringify(data))
+                case 'POST':
+                    let addedData = {}
+                    myUrl.searchParams.forEach((value, key) => {
+                        addedData[key] = value
+                    })
+                    data = [...data, addedData]
+                    fs.writeFileSync("storage/comments.json", JSON.stringify(data))
                     res.writeHead(200, 'application/json')
-                    res.end("Added Successfully");
+                    res.end("Added Successfully")
                     break;
                 default:
                     res.end("Request Method not Supported")
                     break;
             }
-            res.end()
         break;
         default:
             fs.readFile(
@@ -169,6 +163,8 @@ const server = http.createServer((req, res) => {
     }
 
 })
+
+//? Level 5 : Files Routing
 
 
 // Launching server
